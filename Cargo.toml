@@ -4,6 +4,14 @@ version = "0.1.0"
 authors = ["Jonathas-Conceicao <jadoliveira@inf.ufpel.edu.br>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+actix-rt = "0.2"
+actix-web = { version = "1", features = [ "ssl" ] }
+exitfailure = "0.5"
+failure = "0.1"
+futures = "0.1"
+openssl = "0.10"
+structopt = "0.2"
+
+[dev-dependencies]
+assert_cmd = "0.11"
