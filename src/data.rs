@@ -1,5 +1,4 @@
-use crate::error::Result;
-use failure::format_err;
+use crate::error::{Error, Result};
 use select::{document::Document, predicate::Class};
 
 pub(super) struct Data {
@@ -10,7 +9,7 @@ impl Data {
     pub(super) fn from_raw_html(html: String) -> Result<Self> {
         let doc = Document::from_read(html.as_bytes())?;
         let lyrics = lyric_in_html(doc)
-            .ok_or(format_err!("Failed to find data via selector"))?
+            .ok_or(Error::DataError)?
             .trim()
             .to_string();
 

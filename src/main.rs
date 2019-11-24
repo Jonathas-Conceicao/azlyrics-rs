@@ -2,9 +2,7 @@ mod client;
 mod data;
 mod error;
 
-use actix_rt::{Arbiter, System};
-use exitfailure::ExitFailure;
-use futures::future::{self, Future};
+use actix_rt::System;
 use structopt::StructOpt;
 
 /// A CLI crawler to fetch music lyrics from www.azlyrics.com
@@ -16,22 +14,18 @@ struct CmdLineOpts {
     song: String,
 }
 
-fn main() -> Result<(), ExitFailure> {
-    let cmo = CmdLineOpts::from_args();
+fn main() {
+    System::new("azlyrics").block_on(async {
+        let cmo = CmdLineOpts::from_args();
 
-    let sys = System::new("azlyrics");
-
-    Arbiter::spawn(future::lazy(move || {
-        client::Client::default()
+        let html = client::Client::default()
             .fetch_lyric(&cmo.artist, &cmo.song)
-            .and_then(|html| data::Data::from_raw_html(html))
-            .map(|data| println!("{}", data.lyrics))
-            .map_err(|e| println!("{:?}", e))
-            .then(|_| {
-                System::current().stop();
-                Ok(())
-            })
-    }));
+            .await
+            .expect("Failed to fetch html");
+        let data = data::Data::from_raw_html(html).expect("Unable to parse data");
 
-    Ok(sys.run()?)
+        println!("{}", data.lyrics);
+
+        System::current().stop()
+    })
 }

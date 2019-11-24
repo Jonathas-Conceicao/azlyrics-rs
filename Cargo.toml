@@ -5,11 +5,9 @@ authors = ["Jonathas-Conceicao <jadoliveira@inf.ufpel.edu.br>"]
 edition = "2018"
 
 [dependencies]
-actix-rt = "0.2"
-actix-web = { version = "1", features = [ "ssl" ] }
-exitfailure = "0.5"
-failure = "0.1"
-futures = "0.1"
+actix-rt = "1.0.0-alpha.1"
+awc = { version = "0.3.0-alpha.1", features = [ "openssl" ] }
+derive_more = "0.99"
 openssl = "0.10"
 select = "0.4"
 structopt = "0.2"
