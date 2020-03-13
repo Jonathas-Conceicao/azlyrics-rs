@@ -5,9 +5,8 @@ authors = ["Jonathas-Conceicao <jadoliveira@inf.ufpel.edu.br>"]
 edition = "2018"
 
 [dependencies]
-actix-rt = "0.2"
-awc = { version = "0.2", features = [ "ssl" ] }
-futures = "0.1"
+actix-rt = "1"
+awc = { version = "1", features = [ "openssl" ] }
 openssl = "0.10"
 select = "0.4"
 structopt = "0.2"
