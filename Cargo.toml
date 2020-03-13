@@ -7,7 +7,6 @@ edition = "2018"
 [dependencies]
 actix-rt = "0.2"
 actix-web = { version = "1", features = [ "ssl" ] }
-exitfailure = "0.5"
 failure = "0.1"
 futures = "0.1"
 openssl = "0.10"

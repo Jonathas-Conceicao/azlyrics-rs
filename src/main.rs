@@ -1,9 +1,7 @@
 mod client;
 mod data;
-mod error;
 
 use actix_rt::{Arbiter, System};
-use exitfailure::ExitFailure;
 use futures::future::{self, Future};
 use structopt::StructOpt;
 
@@ -16,7 +14,7 @@ struct CmdLineOpts {
     song: String,
 }
 
-fn main() -> Result<(), ExitFailure> {
+fn main() {
     let cmo = CmdLineOpts::from_args();
 
     let sys = System::new("azlyrics");
@@ -24,7 +22,7 @@ fn main() -> Result<(), ExitFailure> {
     Arbiter::spawn(future::lazy(move || {
         client::Client::default()
             .fetch_lyric(&cmo.artist, &cmo.song)
-            .and_then(|html| data::Data::from_raw_html(html))
+            .and_then(|html| Ok(data::Data::from_raw_html(html)))
             .map(|data| println!("{}", data.lyrics))
             .map_err(|e| println!("{:?}", e))
             .then(|_| {
@@ -33,5 +31,5 @@ fn main() -> Result<(), ExitFailure> {
             })
     }));
 
-    Ok(sys.run()?)
+    sys.run().unwrap()
 }

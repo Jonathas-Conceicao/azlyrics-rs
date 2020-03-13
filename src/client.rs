@@ -1,6 +1,4 @@
-use crate::error::Error;
 use actix_web::http;
-use failure::format_err;
 use futures::future::Future;
 
 const USER_AGENT: &str =
@@ -38,13 +36,13 @@ impl Client {
         &self,
         artist: &str,
         song: &str,
-    ) -> impl Future<Item = String, Error = Error> {
+    ) -> impl Future<Item = String, Error = ()> {
         self.client
             .get(format!("{}/{}/{}.html", self.server, artist, song))
             .send()
             .map(|mut res| res.body())
-            .map_err(|e| format_err!("Client request failed: {:?}", e))
-            .and_then(|body| body.map_err(|e| format_err!("Failed to read body: {:?}", e)))
-            .and_then(|bytes| Ok(String::from(std::str::from_utf8(&bytes)?)))
+            .map_err(|e| panic!("Client request failed: {:?}", e))
+            .and_then(|body| body.map_err(|e| panic!("Failed to read body: {:?}", e)))
+            .and_then(|bytes| Ok(String::from(std::str::from_utf8(&bytes).unwrap())))
     }
 }
