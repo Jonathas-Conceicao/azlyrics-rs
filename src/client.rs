@@ -1,4 +1,4 @@
-use actix_web::http;
+use awc::http;
 use futures::future::Future;
 
 const USER_AGENT: &str =
@@ -6,16 +6,16 @@ const USER_AGENT: &str =
 
 pub(super) struct Client {
     server: String,
-    client: actix_web::client::Client,
+    client: awc::Client,
 }
 
 impl Default for Client {
     fn default() -> Self {
         Client {
             server: String::from("https://www.azlyrics.com/lyrics"),
-            client: actix_web::client::Client::build()
+            client: awc::Client::build()
                 .connector(
-                    actix_web::client::Connector::new()
+                    awc::Connector::new()
                         .ssl(
                             openssl::ssl::SslConnector::builder(openssl::ssl::SslMethod::tls())
                                 .expect("Unable to build SSL connector!")
